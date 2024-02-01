@@ -56,6 +56,8 @@ In the AWS Management Console, go to the [S3 service](https://s3.console.aws.ama
 
 You can keep the default recommended settings. The 2 settings you'll need to set are name (eg `my-app-name-development`) and region (eg `us-east-2`).
 
+I recommend naming the bucket the same as your app with the env at the end. This way you can easily identify production, development, and test environments. Later on we'll be able to set the bucket name dynamically in our code like this `your-app-name-<%= Rails.env %>`.
+
 3. Configure IAM for Security
 
 IAM is a security tool to configure who has access to your resources. In the [IAM dashboard](https://us-east-1.console.aws.amazon.com/iam/), [create a new user](https://us-east-1.console.aws.amazon.com/iam/home#/users/create) with username (eg `my-app-name-development`) and programmatic access. Attach the “AmazonS3FullAccess” policy or a custom policy. 
@@ -113,7 +115,7 @@ amazon:
   access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
   secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
   region: <%= Rails.application.credentials.dig(:aws, :region) %>
-  bucket: your_app_name_<%= Rails.env %>
+  bucket: your-app-name-<%= Rails.env %>
 ```
 
 I recommend naming the bucket the same as your app with the env at the end. This way you can easily identify production, development, and test environments.

@@ -54,15 +54,25 @@ Setting Up an AWS S3 Bucket
 2. Create an S3 Bucket
 In the AWS Management Console, go to the [S3 service](https://s3.console.aws.amazon.com/s3) and create a new bucket.
 
+![](assets/select-s3.png)
+
 You can keep the default recommended settings. The 2 settings you'll need to set are name (eg `my-app-name-development`) and region (eg `us-east-2`).
 
 I recommend naming the bucket the same as your app with the env at the end. This way you can easily identify production, development, and test environments. Later on we'll be able to set the bucket name dynamically in our code like this `your-app-name-<%= Rails.env %>`.
 
+![](assets/create-bucket.png)
+
 3. Configure IAM for Security
 
-IAM is a security tool to configure who has access to your resources. In the [IAM dashboard](https://us-east-1.console.aws.amazon.com/iam/), [create a new user](https://us-east-1.console.aws.amazon.com/iam/home#/users/create) with username (eg `my-app-name-development`) and programmatic access. Attach the “AmazonS3FullAccess” policy or a custom policy. 
+IAM is a security tool to configure who has access to your resources. In the [IAM dashboard](https://us-east-1.console.aws.amazon.com/iam/), [create a new user](https://us-east-1.console.aws.amazon.com/iam/home#/users/create) with username (eg `my-app-name-development`) and programmatic access. Attach the “AmazonS3FullAccess” policy or a custom policy.
+
+![](assets/create-iam-user.png)
+
+![](asserts/attach-iam-permissions.png)
 
 We'll need to create a access key ID and secret access key for this IAM user so your application can access the bucket as this user. On the users page click "create access key" and take a note of the "access key" and "secret access key". You'll need to do this step again if you lose the "secret access key".
+
+![](assets/iam-access-key.png)
 
 <aside>
 It is considered an AWS best practice to grant permissions to a "user group" and then add users to the group. This is especially helpful when managing permissions for many users at larger organizations.
@@ -187,6 +197,10 @@ In your view file:
   <img src="https://ideal-zebra-g4qx7jj9w6w26q7-3000.app.github.dev/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--107dc5bf48f5ca224403a2537ad894df54b1c55e/1658267413316.jpeg" />
 </div>
 ```
+
+When you attach a file to a record, it will be uploaded and safely stored in your AWS bucket.
+
+![](assets/bucket-with-uploaded-file.png)
 
 ## Conclusion
 This guide covered setting up image uploads in Ruby on Rails using Active Storage and Amazon AWS S3. Remember to keep your AWS credentials secure and manage permissions carefully for security.

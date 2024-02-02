@@ -36,7 +36,7 @@ Active Storage uses 3 tables.
 </aside>
 
 
-In this we'll use AWS, however, you could use any cloud storage service you like. 
+In this we'll use AWS, however, you could use any cloud storage service you like. AWS S3 (simple storage service) is very affordable. Your bill will likely be <$1/month until you start requiring huge amounts of storage and throughput. See [pricing](https://aws.amazon.com/s3/pricing/) for more details.
 
 Let's add the [AWS SDK Gem](https://rubygems.org/gems/aws-sdk-s3/)
 Add this line to your Gemfile:
@@ -92,18 +92,23 @@ Click “Edit” and add a CORS policy. Example for a general setup:
 Click “Save changes.”
 </aside>
 
-5. Integrating S3 with Rails
-Add the S3 credentials to your Rails credentials file:
+4. Integrating S3 with Rails
+Add the S3 credentials to your Rails credentials file. In the terminal run:
 
 ```bash
 EDITOR="code --wait" rails credentials:edit
 ```
 
+<aside>
+If you're using a codespace, make sure to keep a copy of your `master.key` somewhere since it's not tracked with version control.
+</aside>
+
+And then add your AWS credentials.
+
 ```yaml
 aws:
-  access_key_id: [YOUR_ACCESS_KEY_ID]
-  secret_access_key: [YOUR_SECRET_ACCESS_KEY]
-  region: [YOUR_BUCKET_REGION]
+  access_key_id: YOUR_ACCESS_KEY_ID
+  secret_access_key: YOUR_SECRET_ACCESS_KEY
 ```
 
 Configure S3 Service
@@ -114,19 +119,17 @@ amazon:
   service: S3
   access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
   secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
-  region: <%= Rails.application.credentials.dig(:aws, :region) %>
+  region: us-east-2 # set to your region
   bucket: your-app-name-<%= Rails.env %>
 ```
 
-I recommend naming the bucket the same as your app with the env at the end. This way you can easily identify production, development, and test environments.
-
-In `config/environments/production.rb`, set Active Storage to use S3 in production:
+In `config/environments/development.rb` (and `production.rb`), set Active Storage to use S3 in production:
 
 ```ruby
 config.active_storage.service = :amazon
 ```
 
-Attach File to a Model
+5. Attach File to a Model
 In your model (e.g., `app/models/user.rb`):
 
 ```ruby
@@ -135,7 +138,9 @@ class User < ApplicationRecord
 end
 ```
 
-Update Form for File Upload
+<!-- TODO: explain how this works in the table -->
+
+6. Update Form for File Upload
 In your form view:
 
 ```erb
@@ -145,28 +150,49 @@ In your form view:
 <% end %>
 ```
 
-<!-- TODO: show how this is rendered in html -->
+<!-- TODO: explain how this is rendered in html -->
 
-Handle File Upload in Controller
+```html
+<form enctype="multipart/form-data" action="/users" accept-charset="UTF-8" method="post"><input type="hidden" name="authenticity_token" value="ED5XJBGQt1zpFXgFyAajER_Z-3sVAwb5SKYpdUShNDGYFTZN9RFtmhdNhGR9SWiuoGxcAeMMHdCn32CEmEeatA" autocomplete="off" />
+
+  <div>
+    <input type="file" name="user[avatar]" id="user_avatar" />
+  </div>
+
+  <div>
+    <input type="submit" name="commit" value="Create User" data-disable-with="Create User" />
+  </div>
+</form>
+```
+
+7. Handle File Upload in Controller
 In your controller, permit the file parameter:
 
 ```ruby
 def user_params
-  params.require(:user).permit(:name, :avatar)
+  params.require(:user).permit(:avatar)
 end
 ```
 
-Displaying the Upload
+8. Displaying the Upload
 In your view file:
 
 ```erb
 <%= image_tag @user.avatar if @user.avatar.attached? %>
 ```
 
-Conclusion
+<!-- TODO: explain how source url is generated -->
+```html
+<div id="user_1">
+  <img src="https://ideal-zebra-g4qx7jj9w6w26q7-3000.app.github.dev/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCZz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--107dc5bf48f5ca224403a2537ad894df54b1c55e/1658267413316.jpeg" />
+</div>
+```
+
+## Conclusion
 This guide covered setting up image uploads in Ruby on Rails using Active Storage and Amazon AWS S3. Remember to keep your AWS credentials secure and manage permissions carefully for security.
 
 Additional Resources
-[Active Storage Overview](https://guides.rubyonrails.org/active_storage_overview.html)
-[AWS SDK for Ruby](https://aws.amazon.com/sdk-for-ruby/)
-[AWS S3 Documentation](https://docs.aws.amazon.com/s3/)
+- [Active Storage Overview](https://guides.rubyonrails.org/active_storage_overview.html)
+- [AWS SDK for Ruby](https://aws.amazon.com/sdk-for-ruby/)
+- [AWS S3 Documentation](https://docs.aws.amazon.com/s3/)
+- [FTP client for Mac](https://ftp-mac.com/)

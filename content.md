@@ -1,6 +1,6 @@
 # Image Uploads with Ruby on Rails, Active Storage, and Amazon AWS S3
 
-This guide focuses on setting up image uploads in a Ruby on Rails application using Active Storage and Amazon AWS S3. Before diving into the setup process, it's important to understand the concept of BLOBs (binary large objects) and their storage requirements.
+This tutorial provides a detailed guide on integrating image uploads in a Ruby on Rails application using Active Storage and Amazon AWS S3. Understanding the management of BLOBs (Binary Large Objects) is crucial for this setup, as it forms the foundation of handling large data files like images, audio, and video efficiently.
 
 ## Introduction to BLOBs
 
@@ -18,9 +18,10 @@ BLOBs, or Binary Large Objects, refer to large data items such as images, audio 
 
 With these considerations in mind, let's explore how to implement a robust and scalable solution for handling BLOBs in Ruby on Rails using Active Storage and Amazon AWS S3.
 
-## Part 1: Setting Up Active Storage with Amazon S3
+## Setting Up Active Storage with Amazon S3
 
-Install Active Storage
+### Install Active Storage
+Run these commands to install Active Storage and migrate your database:
 
 ```bash
 rails active_storage:install
@@ -30,14 +31,15 @@ rails db:migrate
 <aside>
 Active Storage uses 3 tables.
 
-`active_storage_attachments`: Connects blobs to your models
-`active_storage_blobs`: Stores data about uploaded files in the cloud, such as filename and content type.
-`active_storage_variant_records`: tracks different variants (if enabled)
+`active_storage_attachments`: Links blobs to your models
+`active_storage_blobs`: Contains metadata for uploaded files, such as filenames and content types.
+`active_storage_variant_records`: Tracks image variants, if enabled.
 </aside>
 
+### Choose Your Cloud Storage
+Although we focus on AWS S3 (simple storage service) for its affordability and scalability, Active Storage supports various storage services. Refer to [AWS S3 pricing]((https://aws.amazon.com/s3/pricing/)) for cost details.
 
-In this we'll use AWS, however, you could use any cloud storage service you like. AWS S3 (simple storage service) is very affordable. Your bill will likely be <$1/month until you start requiring huge amounts of storage and throughput. See [pricing](https://aws.amazon.com/s3/pricing/) for more details.
-
+### Add the AWS SDK Gem
 Let's add the [AWS SDK Gem](https://rubygems.org/gems/aws-sdk-s3/)
 Add this line to your Gemfile:
 
@@ -47,7 +49,7 @@ gem 'aws-sdk-s3', require: false
 
 Then, run `bundle install`.
 
-Setting Up an AWS S3 Bucket
+### Set Up an AWS S3 Bucket
 
 1. [Sign up for an AWS account](https://aws.amazon.com/).
 
@@ -58,7 +60,7 @@ In the AWS Management Console, go to the [S3 service](https://s3.console.aws.ama
 
 You can keep the default recommended settings. The 2 settings you'll need to set are name (eg `my-app-name-development`) and region (eg `us-east-2`).
 
-I recommend naming the bucket the same as your app with the env at the end. This way you can easily identify production, development, and test environments. Later on we'll be able to set the bucket name dynamically in our code like this `your-app-name-<%= Rails.env %>`.
+Recommendation: Use a naming convention that includes your environment (development, production) for easier management. This way you can easily identify production, development, and test environments. Later on we'll be able to set the bucket name dynamically in our code like this `your-app-name-<%= Rails.env %>`.
 
 ![](assets/create-bucket.png)
 
@@ -102,7 +104,7 @@ Click “Edit” and add a CORS policy. Example for a general setup:
 Click “Save changes.”
 </aside>
 
-4. Integrating S3 with Rails
+### Integrate S3 with Rails
 Add the S3 credentials to your Rails credentials file. In the terminal run:
 
 ```bash
@@ -139,7 +141,7 @@ In `config/environments/development.rb` (and `production.rb`), set Active Storag
 config.active_storage.service = :amazon
 ```
 
-5. Attach File to a Model
+### Attach File to a Model
 In your model (e.g., `app/models/user.rb`):
 
 ```ruby
@@ -150,7 +152,7 @@ end
 
 <!-- TODO: explain how this works in the table -->
 
-6. Update Form for File Upload
+### Update Form for File Upload
 In your form view:
 
 ```erb
@@ -175,7 +177,7 @@ In your form view:
 </form>
 ```
 
-7. Handle File Upload in Controller
+### Handle File Upload in Controller
 In your controller, permit the file parameter:
 
 ```ruby
@@ -184,7 +186,7 @@ def user_params
 end
 ```
 
-8. Displaying the Upload
+### Display the Upload
 In your view file:
 
 ```erb

@@ -178,7 +178,7 @@ end
 In your view file:
 
 ```erb
-<%= image_tag @user.avatar if @user.avatar.attached? %>
+<%= image_tag user.avatar if user.avatar.attached? %>
 ```
 
 <!-- TODO: explain how source url is generated -->

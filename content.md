@@ -186,6 +186,21 @@ def user_params
 end
 ```
 
+<aside>
+   If you're adding an avatar to a Devise user you may need to override the default [Strong Parameters](https://github.com/heartcombo/devise?tab=readme-ov-file#strong-parameters). Something like this:
+```ruby
+class ApplicationController < ActionController::Base
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:account_update, keys: [:password, :password_confirmation, :current_password, :avatar])
+  end
+end
+```
+</aside>
+
 ### Display the Upload
 In your view file:
 

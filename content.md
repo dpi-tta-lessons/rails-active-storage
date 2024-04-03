@@ -211,4 +211,6 @@ Additional Resources
 - [Active Storage Overview](https://guides.rubyonrails.org/active_storage_overview.html)
 - [AWS SDK for Ruby](https://aws.amazon.com/sdk-for-ruby/)
 - [AWS S3 Documentation](https://docs.aws.amazon.com/s3/)
-- [FTP client for Mac](https://ftp-mac.com/)
+- FTP Clients (File Transfer Protocol)
+   - [Commander One](https://ftp-mac.com/)
+   - [Cyberduck](https://cyberduck.io/)

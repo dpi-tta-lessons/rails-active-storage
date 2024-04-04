@@ -219,6 +219,26 @@ When you attach a file to a record, it will be uploaded and safely stored in you
 
 ![](assets/bucket-with-uploaded-file.png)
 
+## Attach image in sample data
+You can use the `faker` gem to generate avatar image urls. You'll need to download and attach them if you want to set an avatar in your `sample_data` rake task.
+
+```ruby
+# library to open an http, https or ftp URL as though it were a file
+require 'open-uri'
+
+# Use Faker to get an avatar URL
+# eg "https://robohash.org/perspiciatisquisit.png?size=300x300&set=set1"
+avatar_url = Faker::Avatar.image
+
+# Download the avatar image
+avatar_image = URI.open(avatar_url)
+
+# Attach the avatar image to the user
+user.avatar.attach(io: avatar_image, filename: 'avatar.jpg', content_type: 'image/jpg')
+```
+
+You can also use [Faker::LoremFlickr.image](https://github.com/faker-ruby/faker/blob/main/doc/default/lorem_flickr.md) to get sample images from [Flickr](https://www.flickr.com/).
+
 ## Conclusion
 This guide covered setting up image uploads in Ruby on Rails using Active Storage and Amazon AWS S3. Remember to keep your AWS credentials secure and manage permissions carefully for security.
 

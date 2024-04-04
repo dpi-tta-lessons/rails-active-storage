@@ -219,8 +219,8 @@ When you attach a file to a record, it will be uploaded and safely stored in you
 
 ![](assets/bucket-with-uploaded-file.png)
 
-## Attach image in sample data
-You can use the `faker` gem to generate avatar image urls. You'll need to download and attach them if you want to set an avatar in your `sample_data` rake task.
+## Attaching Images in Sample Data Task
+You can use the `faker` gem to generate avatar image urls for your sample data: you'll  generate a url, download the data, then attach it to your record.
 
 ```ruby
 # library to open an http, https or ftp URL as though it were a file

@@ -112,7 +112,9 @@ EDITOR="code --wait" rails credentials:edit
 ```
 
 <aside>
-If you want to keep development and test data out of production (recommended) you may want to create separate credentials for your different environments. Add the development flag in order to have separate credentials `EDITOR="code --wait" rails credentials:edit --environment=development`.
+If you want to keep development and test data out of production (recommended) you may want to create separate credentials for your different environments. Add the `--environment=development` flag in order to have separate credentials.
+   
+`EDITOR="code --wait" rails credentials:edit --environment=development`
 </aside>
 
 <aside>

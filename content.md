@@ -70,7 +70,7 @@ IAM is a security tool to configure who has access to your resources. In the [IA
 
 ![](assets/create-iam-user.png)
 
-![](asserts/attach-iam-permissions.png)
+![](assets/attach-iam-permissions.png)
 
 We'll need to create a access key ID and secret access key for this IAM user so your application can access the bucket as this user. On the users page click "create access key" and take a note of the "access key" and "secret access key". You'll need to do this step again if you lose the "secret access key".
 
